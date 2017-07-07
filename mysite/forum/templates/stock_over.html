@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<center>
+<h2>您预约的{{fail_list}}库存不足</h2>
+<h3>장바구니에서 삭제했어염</h3>
+<h3>참고로 다른물건은 다삼ㅋ</h3>
+<tr>
+<a href="{% url 'index' %}" class="btn btn-default" role="button">返回首页</a>
+</tr>
+</center>
+{% endblock %}
+

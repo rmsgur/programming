@@ -133,8 +133,10 @@ class MyUser(AbstractBaseUser):
         useritems = UserItem.objects.filter(user_id=self)
         for useritem in useritems:
             if useritem.is_in_cart == True:
-                total_price += useritem.quantity * get_object_or_404(Post, pk=useritem.item_id).price
-        return total_price
+                total_price += useritem.total_price
+        self.total_price = total_price
+        slef.save()
+        return
 
 
 class Post(models.Model):
@@ -165,7 +167,7 @@ class UserItem(models.Model):
     user_id = models.ForeignKey('MyUser')
     item_id = models.IntegerField()
     product_author = models.CharField(max_length=11)
-    date_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now=True)
     quantity = models.IntegerField(verbose_name="购买数量", default=1)
     phonenumber = models.CharField(verbose_name="手机号", max_length=11)
     address = models.CharField(verbose_name="地址", max_length=255)
@@ -183,7 +185,11 @@ class UserItem(models.Model):
         return '%s%s' %(settings.MEDIA_URL, get_object_or_404(Post, pk=self.item_id).image)
 
     def get_price(self):
-        return get_object_or_404(Post, pk=self.item_id).price
+        self.price = get_object_or_404(Post, pk=self.item_id).price
+        self.save()
+        return
 
     def get_total_price(self):
-        return get_object_or_404(Post, pk=self.item_id).price * self.quantity
+        self.total_price = self.quantity * get_object_or_404(Post, pk=self.item_id).price
+        self.save()
+        return

@@ -79,13 +79,13 @@ function deleteAction(){
                     <a href="{% url 'post' useritem.item_id %}"><img src="{{ useritem.get_image_url }}" width="60" height="60"> <FONT COLOR="#000000">{{ useritem.item_title }}</FONT></a>
                 </td>
                 <td>
-                    ¥ {{ useritem.get_price }}
+                    ¥ {{ useritem.price }}
                 </td>
                 <td>
                     {{ useritem.quantity }}
                 </td>
                 <td>
-                    ¥ {{ useritem.get_total_price }}
+                    ¥ {{ useritem.total_price }}
                 </td>
             </tr>
             {% endif %}
@@ -98,7 +98,7 @@ function deleteAction(){
                     <b>总计：</b>
                 </td>
                 <td>
-                    ¥ {{ user.get_total_price }}
+                    ¥ {{ user.total_price }}
                 </td>
             </tr>
         </tbody>

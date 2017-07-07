@@ -7,6 +7,7 @@ from .models import Post, MyUser, UserItem
 from .forms import PostForm, ReplyForm, UserItemForm
 from django.db.models import Q
 from decimal import *
+from django.shortcuts import get_object_or_404
 
 def index(request):
     posts = Post.objects.order_by('-created_at')
@@ -227,6 +228,7 @@ def shoppingcart(request, post_id):
         useritem.price = post.price
         useritem.total_price = useritem.quantity * useritem.price
         useritem.is_in_cart = True
+        useritem.product_author = post.author
         user = get_object_or_404(MyUser, pk=useritem.user_id_id)
         user.total_price += post.price * useritem.quantity
         useritem.save()
@@ -274,6 +276,20 @@ def post_change(request, post_id):
         post.price = Decimal(request.POST.get('price'))
         post.type = request.POST.get('type')
         post.save()
+        useritems = UserItem.objects.filter(product_author=request.user)
+        for useritem in useritems:
+            if useritem.is_in_cart == True:
+                useritem.price = post.price
+                useritem.total_price = post.price * useritem.quantity
+                useritem.save()
+                user = MyUser.objects.get(id=useritem.user_id_id)
+                total_price = Decimal(0.0)
+                list = UserItem.objects.filter(user_id_id=user.id)
+                for id in list:
+                    if id.is_in_cart == True:
+                        total_price += useritem.total_price
+                user.total_price = total_price
+                user.save()
         return redirect('post', post_id)
     else:
         form = PostForm(None)
@@ -354,8 +370,42 @@ def mycart_delete(request):
     return redirect('mycart')
 
 def mycart_purchase(request):
+    myuser = request.user
+    total_price = Decimal(0.0)
     list=request.POST.getlist('check1')
+    num = 0
     for id in list:
-        return redirect('index')
-    return redirect('index')
-
+        num += 1
+    if num == 0:
+        return redirect('mycart')
+    for id in list:
+        useritem = UserItem.objects.get(id=id)
+        print("item id: ", useritem.item_id)
+        total_price += get_object_or_404(Post, pk=useritem.item_id).price * useritem.quantity
+    if myuser.money < total_price:
+        return redirect('purchase_fail')
+    
+    fail_list = []
+    success = True
+    for id in list:
+        useritem = UserItem.objects.get(id=id)
+        post = get_object_or_404(Post, pk=useritem.item_id)
+        if useritem.quantity < post.quantity:
+            post.quantity -= useritem.quantity
+            useritem.is_in_cart = False
+            useritem.is_purchased = True
+            myuser.money -= useritem.quantity * post.price
+            myuser.total_price -= useritem.quantity * post.price
+            useritem.save()
+            post.save()
+            myuser.save()
+        else:
+            fail_list.append(post.title)
+            myuser.total_price -= useritem.quantity * post.price
+            myuser.save()
+            useritem.delete()
+            success = False
+    print(fail_list)
+    if success == True:
+        return redirect('purchase_success')
+    return render(request, 'stock_over.html', {'fail_list': fail_list})
