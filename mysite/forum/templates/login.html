@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .my_body{ width: 90%; margin:0 auto; }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>登录</h3>
+    </div>
+    <div class="panel-boby"><div class="my_body"><br>
+    <form method="post" action="{% url 'authenticate' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">昵称/店铺名称</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username / Shop Name" required/>
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">登录</button>
+    </form>
+    </div><br></div>
+</div>
+{% endblock %}

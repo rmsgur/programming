@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+<center>
+<div>
+    <img src="{% static 'bootstrap/images/upload_success.jpg' %}" alt="create_complete"/>
+</div>
+<div>
+<a href="{% url 'index' %}" class="btn btn-primary" role="button">&nbsp;&nbsp;&nbsp;首页&nbsp;&nbsp;&nbsp;</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'create' %}" class="btn btn-primary" role="button">继续上传</a>
+</div>
+</center>
+<br>
+<br>
+<br>
+{% endblock %}

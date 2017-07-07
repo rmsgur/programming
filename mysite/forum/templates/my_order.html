@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<style>
+    .my_body{ width: 95%; margin:0 auto; }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>我的历史订单</h3>
+    </div>
+    <div class="panel-boby"><div class="my_body"><br>
+    <table class="table table-hover">
+        <tbody class="table">
+            {% if user.is_seller == False %}
+            <tr>
+                <td>
+                    <b>商品：</b>
+                </td>
+                <td>
+                    <b>单价：</b>
+                </td>
+                <td>
+                    <b>购买数量：</b>
+                </td>
+                <td>
+                    <b>小计：</b>
+                </td>
+                <td>
+                    <b>购买时间：</b>
+                </td>
+                <td>
+                    <b>订单状态：</b>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>
+                    <b>商品:</b>
+                </td>
+                <td>
+                    <b>单价:</b>
+                </td>
+                <td>
+                    <b>购买此商品的用户:</b>
+                </td>
+                <td>
+                    <b>购买数量:</b>
+                </td>
+                <td>
+                    <b>用户联系方式:</b>
+                </td>
+                <td>
+                    <b>用户地址:</b>
+                </td>
+                <td>
+                    <b>订单状态:</b>
+                </td>
+            </tr>
+            {% endif %}
+            {% for useritem in useritems %}
+            {% if useritem.is_purchased == True %}
+            {% if user.is_seller == False %}
+            <tr>
+                <td>
+                    <a href="{% url 'post' useritem.item_id %}"><img src="{{ useritem.get_image_url }}" width="60" height="60"> <FONT COLOR="#000000">{{ useritem.item_title }}</FONT></a>
+                </td>
+                <td>
+                    ¥ {{ useritem.price }}
+                </td>
+                <td>
+                    {{ useritem.quantity }}
+                </td>
+                <td>
+                    ¥ {{ useritem.total_price }}
+                </td>
+                <td>
+                    {{ useritem.date_added }}
+                </td>
+                <td>
+                {% if useritem.is_sended == False %}
+                    <b>未发</b>
+                {% else %}
+                    {% if useritem.is_received == False %}
+                    <b>发货中</b> <a href="{% url 'receive_clicked' useritem.id %}" class="btn btn-primary" role="button">确认收货</a>
+                     {% else %}
+                     <b>交易结束</b>
+                    {% endif %}
+                {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>
+                    <a href="{% url 'post' useritem.item_id %}"><img src="{{ useritem.get_image_url }}" width="60" height="60"> <FONT COLOR="#000000">{{ useritem.item_title }}</FONT></a>
+                </td>
+                <td>
+                    ¥ {{useritem.price}}
+                </td>
+                <td>
+                    {{useritem.user_id}}
+                </td>
+                <td>
+                    {{ useritem.quantity }}
+                </td>
+                <td>
+                    {{useritem.phonenumber}}
+                </td>
+                <td>
+                    {{useritem.address}}
+                </td>
+                <td>
+                {% if useritem.is_sended == False %}
+                    <a class="btn btn-info btn-lg" href="{%url 'send_clicked' useritem.id %}" role="button">发货</a>
+                {% else %}
+                    {% if useritem.is_received == False %}
+                    <b>发货中</b>
+                    {% else %}
+                    <b>交易结束</b>
+                    {% endif %}
+                {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    </div><br></div>
+{% endblock %}

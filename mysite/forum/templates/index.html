@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .carousel-inner > .item > img,
+    .carousel-inner > .item > a > img { width: 700px; height: 310px; margin: auto;}
+</style>
+<style type="text/css">
+    .c_container{ width:1050px; height:auto; margin:0 auto; }
+    .content{ height: 320px;}
+    .c_bottom{ }
+    #custom_1{ float: left; }
+    #custom_2{ height: 310px; float: right; }
+</style>
+
+<div class="c_container">
+    <div class="content">
+        <form class="form-inline">
+            <div class="form-group" id="custom_1">
+                <div id="sidebar">
+                    <div class="list-group">
+                        <a href="{% url 'menu' 'fish' %}" class="list-group-item"><h4><strong>鱼类<small>（三文鱼、金枪鱼、带鱼...）</small>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>{% bootstrap_icon 'chevron-right' %}</h4></a>
+                        <a href="{% url 'menu' 'crustacea' %}" class="list-group-item"><h4><strong>甲壳类<small>（龙虾、螃蟹、大虾...）</small>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>{% bootstrap_icon 'chevron-right' %}</h4></a>
+                        <a href="{% url 'menu' 'mammalia' %}" class="list-group-item"><h4><strong>哺乳纲<small>（鲸鱼、鲨鱼、海狮...）</small>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>{% bootstrap_icon 'chevron-right' %}</h4></a>
+                        <a href="{% url 'menu' 'mollusca' %}" class="list-group-item"><h4><strong>软体动物<small>（贝类、鱿鱼、章鱼...）</small>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>{% bootstrap_icon 'chevron-right' %}</h4></a>
+                        <a href="{% url 'menu' 'coelenterate' %}" class="list-group-item"><h4><strong>腔肠动物<small>（海蜇、海葵、珊瑚...）</small>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>{% bootstrap_icon 'chevron-right' %}</h4></a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="custom_2">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel"><!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <a href="{% url 'index' %}"><img src="{% static 'bootstrap/images/slide_1.jpg' %}" alt="1" width="700" height="310"></a>
+                        </div>
+                        <div class="item">
+                            <a href="{% url 'index' %}"><img src="{% static 'bootstrap/images/slide_2.jpg' %}" alt="2" width="700" height="310"></a>
+                        </div>
+                        <div class="item">
+                            <a href="{% url 'index' %}"><img src="{% static 'bootstrap/images/slide_3.jpg' %}" alt="3" width="700" height="310"></a>
+                        </div>
+                    </div>
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="c_bottom">
+        <table class="table table-hover">
+            <tbody class="table">
+                {% for post in posts %}
+                <tr>
+                    <td>
+                        <a href="{% url 'post' post.id %}"><img src="{{ post.get_image_url }}" width="60" height="60"><FONT COLOR="#000000">{{post.title}}</FONT></a>
+                    </td>
+                    <td>
+                        <b>种类：</b>{{post.type}}
+                        <br><b>商品说明：</b>{{post.content}}
+                    </td>
+                    <td>
+                        <div class="pull-right">
+                            <div style ="text-align:right;">
+                                <a href={% url 'shop_info' post.author_id %}><FONT COLOR="#000000">{% bootstrap_icon 'home' %}<b>{{post.author}}</b></FONT></a>
+                                <br>
+                                <h4><FONT COLOR="#ED4C00">¥ {{post.price}}</FONT></h4>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+

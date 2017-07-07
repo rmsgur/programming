@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<h3>修改</h3>
+<div>
+    <form method="post" enctype="multipart/form-data" action="{% url 'post_change' post.id %}">
+        {% csrf_token %}
+            <div class="form-group">
+                <label for="title">商品名</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="商品名" value={{ post.title }} readonly>
+            </div>
+            <div class="form-group">
+                <label for="content">商品说明</label>
+                <input type="text" id="content" name="content" class="form-control" placeholder="商品说明" value={{ post.content }}>
+            </div>
+            <div class="form-group">
+                <label for="price">价格</label>
+                <input type="text" id="price" name="price" class="form-control" placeholder="价格" value={{ post.price }}>
+            </div>
+            <div class="form-group">
+                <label for="quantity">商品数量</label>
+                <input type="text" id="quantity" name="quantity" class="form-control" placeholder="商品数量" value={{ post.quantity }}>
+            </div>
+            <div class="form-group">
+                <label for="image">图片（目前：<a href="{{ post.get_image_url }}">{{ post.image }}</a>）</label>
+                <input type="file" id="image" name="image" placeholder="图片" value={{ post.get_image_url }}>
+            </div>
+            <label for="type">种类</label>
+            <br>
+            <label class="radio-inline">
+                {% if post.type == "鱼类" %}
+                    <input type="radio" name="type" id="鱼类" value="鱼类" checked> 鱼类
+                {% else %}
+                    <input type="radio" name="type" id="鱼类" value="鱼类"> 鱼类
+                {% endif %}
+            </label>
+            <label class="radio-inline">
+                {% if post.type == "甲壳类" %}
+                    <input type="radio" name="type" id="甲壳类" value="甲壳类" checked> 甲壳类
+                {% else %}
+                    <input type="radio" name="type" id="甲壳类" value="甲壳类"> 甲壳类
+                {% endif %}
+            </label>
+            <label class="radio-inline">
+                {% if post.type == "哺乳纲" %}
+                    <input type="radio" name="type" id="哺乳纲" value="哺乳纲" checked> 哺乳纲
+                {% else %}
+                    <input type="radio" name="type" id="哺乳纲" value="哺乳纲"> 哺乳纲
+                {% endif %}
+            </label>
+            <label class="radio-inline">
+                {% if post.type == "软体动物" %}
+                    <input type="radio" name="type" id="软体动物" value="软体动物" checked> 软体动物
+                {% else %}
+                    <input type="radio" name="type" id="软体动物" value="软体动物"> 软体动物
+                {% endif %}
+            </label>
+            <label class="radio-inline">
+                {% if post.type == "腔肠动物" %}
+                    <input type="radio" name="type" id="腔肠动物" value="腔肠动物" checked> 腔肠动物
+                {% else %}
+                    <input type="radio" name="type" id="腔肠动物" value="腔肠动物"> 腔肠动物
+                {% endif %}
+            </label>
+            <br><br>
+            <button type="seller" class="btn btn-primary">修改<tton>
+    </form>
+</div>
+{% endblock %}

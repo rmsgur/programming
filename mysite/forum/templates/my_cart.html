@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+<style>
+    .my_body{ width: 95%; margin:0 auto; }
+    .order-right{ float: right; }
+</style>
+<script src="{% static 'bootstrap/js/jquery.js' %}"></script><script src="{% static 'bootstrap/js/icheck.js' %}"></script>
+<script>  
+$(function(){
+    $("#checkall").click(function(){
+        if(this.checked){
+            $("input[name='check1']:checkbox").each(function(){$(this).prop('checked',true);});
+        }else{
+            $("input[name='check1']:checkbox").each(function(){$(this).prop('checked',false);});    
+        }
+    });
+});  
+</script> 
+<script type="text/javascript">
+function buyAction(){
+    document.demo.action="{% url 'mycart_purchase' %}";
+    document.demo.submit();
+}
+
+
+function deleteAction(){
+    document.demo.action="{% url 'mycart_delete' %}";
+    document.demo.submit(check_val);
+}
+</script>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>我的购物车</h3>
+    </div>
+    <form method="post" enctype="multipart/form-data" name="demo">
+    <div class="panel-boby"><div class="my_body"><br>
+    <table class="table table-hover">
+        <tbody class="table">
+            <tr>
+                <td width="20">
+                    <label>
+                    <input type="checkbox" id="checkall">
+                    </label>
+                    <script>
+                        $("#checkAll").click(function(){
+                            var checked = $(this).prop("checked");
+                                if(checked){
+                                    $(":checkbox[name=subCheck]").prop("checked", true);
+                                } else {
+                                    $(":checkbox[name=subCheck]").prop("checked", false);
+                                }
+                            });
+                    </script>
+                </td>
+                <td>
+                    <b>商品：</b>
+                </td>
+                <td>
+                    <b>单价：</b>
+                </td>
+                <td>
+                    <b>数量：</b>
+                </td>
+                <td>
+                    <b>小计：</b>
+                </td>
+            </tr>
+            {% for useritem in useritems %}
+            {% if useritem.is_in_cart %}
+            <tr>
+                <td width="20">
+                        <label for="option{{useritem.id}}">
+ <input type="checkbox" id="option{{useritem.id }}" name="check1" value="{{ useritem.id }}">
+                        </label>
+                </td>
+                <td>
+                    <a href="{% url 'post' useritem.item_id %}"><img src="{{ useritem.get_image_url }}" width="60" height="60"> <FONT COLOR="#000000">{{ useritem.item_title }}</FONT></a>
+                </td>
+                <td>
+                    ¥ {{ useritem.get_price }}
+                </td>
+                <td>
+                    {{ useritem.quantity }}
+                </td>
+                <td>
+                    ¥ {{ useritem.get_total_price }}
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <b>总计：</b>
+                </td>
+                <td>
+                    ¥ {{ user.get_total_price }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="order-right">
+        <input class="btn btn-primary" type="submit" value="购买" onclick=buyAction()>
+        <input class="btn btn-danger" type="submit" value="删除" onclick=deleteAction()>
+    </div>
+
+    </div></form><br><br></div>
+{% endblock %}

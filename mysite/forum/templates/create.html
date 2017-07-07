@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+<style>
+    .my_body{ width: 90%; margin:0 auto; }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>上传商品</h3>
+    </div>
+    <div class="panel-boby"><div class="my_body"><br>
+    <form method="post" enctype="multipart/form-data" action="{% url 'create' %}">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <label for="type">种类</label>
+        <br>
+        <label class="radio-inline">
+            <input type="radio" name="type" id="鱼类" value="鱼类"> 鱼类
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="type" id="甲壳类" value="甲壳类"> 甲壳类
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="type" id="哺乳纲" value="哺乳纲"> 哺乳纲
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="type" id="软体动物" value="软体动物"> 软体动物
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="type" id="腔肠动物" value="腔肠动物"> 腔肠动物
+        </label>
+        <br>
+        <br>
+        {% buttons submit='上传' %}{% endbuttons %}
+        </form>
+    </form>
+    </div><br></div>
+</div>
+{% endblock %}

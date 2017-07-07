@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .my_body{ width: 90%; margin:0 auto; }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>修改密码</h3>
+    </div>
+    <div class="panel-boby"><br><div class="my_body">
+        <form method="post" action="{% url 'changepwd-pwd' user.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="new_pwd">新密码</label>
+                <input type="password" id="new_pwd" name="new_pwd" class="form-control" placeholder="New Password" required/>
+            </div>
+            <div class="form-group">
+                <label for="again_pwd">再输入</label>
+                <input type="password" id="again_pwd" name="again_pwd" class="form-control" placeholder="Again" required/>
+            </div>
+            <button type="pwd" class="btn btn-primary">修改<tton>
+        </form>
+    </div><br></div>
+</div>
+{% endblock %}

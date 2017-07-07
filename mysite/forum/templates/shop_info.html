@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'bootstrap/css/star-rating.min.css' %}" media="all" rel="stylesheet" type="text/css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{% static 'bootstrap/js/star-rating.min.js' %}" type="text/javascript"></script>
+<style>
+    .custom_profile{ background-color:red; float:left; width:500px; }
+    .custom_name{background-color:blue; }
+</style>
+{% if user.is_seller %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table class="table">
+            <tr>
+                <p><FONT size="6">店铺信息</FONT></p>
+            </tr>
+            <tr>
+                <td width="120>
+	            <a href="{{ user.get_image_url }}"><img src="{{ user.get_image_url }}" width="100" height="100"/></a>
+                </td>
+                <td>
+                    <h2>{% bootstrap_icon 'home' %} {{ user.username }}</h2>
+                    <small>{% bootstrap_icon 'time' %} {{ user.created_at }} 开店</small>
+                </td>
+                <td>
+                    <div class="pull-right">
+                        <br>
+                        <div class="star_right">
+                            <input id="show-star" name="show-star" class="rating rating-loading" data-show-clear="false" data-show-caption="false" data-readonly="true" data-step="0.1" value = {{ user.avg_score }} data-size="xs">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel-body">
+        <p><strong>地址：</strong>{{ user.address }}</p>
+        <br>
+        <p><strong>电话：</strong>{{ user.phonenumber }}</p>
+        <br>
+        <p><strong>邮箱：</strong>{{ user.email }}</p>
+        <br>
+        <p><strong>简介：</strong>{{ user.introduce }}</p>
+        <br>
+    </div>
+    <div class="panel-footer"></div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">商品</div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <tbody class="table">
+                    {% for post in posts %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'post' post.id %}"><img src="{{ post.get_image_url }}" width="60" height="60"> <FONT COLOR="#000000">{{post.title}}</FONT></a>
+                        </td>
+                        <td>
+                            <b>种类：</b>{{post.type}}
+                            <br><b>商品说明：</b>{{post.content}}
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                <div style ="text-align:right;">
+                                    {% bootstrap_icon 'home' %}<b>{{post.author}}</b>
+                                    <br>
+                                    <h4><FONT COLOR="#ED4C00">¥ {{post.price}}</FONT></h4>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% else %}
+    <center><h1>ERROR</h1></center>
+{% endif %}
+{% endblock %}
+
+

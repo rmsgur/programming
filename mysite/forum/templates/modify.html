@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'bootstrap/css/star-rating.min.css' %}" media="all" rel="stylesheet" type="text/css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="{% static 'bootstrap/js/star-rating.min.js' %}" type="text/javascript"></script>
+<style>
+    .custom_profile{ background-color:red; float:left; width:500px; }
+    .custom_name{background-color:blue; }
+</style>
+<style>
+    .my_body{ width: 90%; margin:0 auto; }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table class="table">
+            <tr>
+                <td>
+                    <h3>用户信息</h3>
+                </td><td></td>
+                <td>
+                    <br>
+                    <div class="pull-right">
+                        <a href="{% url 'my_order' user.id %}" class="btn btn-info" role="button">订单管理</a>
+                    </div>
+                </td>
+            </tir>
+            <tr>
+                <td width="120>
+                    <a href="{{ user.get_image_url }}"><img src="{{ user.get_image_url }}" width="100" height="100"/></a>
+                </td>
+                <td>
+                    <h2>{% bootstrap_icon 'home' %} {{ user.username }}</h2>
+                    <small>{% bootstrap_icon 'time' %} {{ user.created_at }}{% if user.is_seller %}开店{% else %}加入{% endif %}</small>
+                </td>
+                <td>
+                    {% if user.is_seller %}
+                        <div class="pull-right">
+                            <br>
+                            <div class="star_right">
+                                <input id="show-star" name="show-star" class="rating rating-loading" data-show-clear="false" data-show-caption="false" data-readonly="true" data-step="0.1" value = {{ user.avg_score }} data-size="xs">
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel-boby">
+        <div class="my_body"><br>
+            {% if user.is_authenticated %}
+                {% if user.is_seller %}
+                <form method="post" enctype="multipart/form-data" action="{% url 'modify-seller' user.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">用户名称：</label>
+                        <b>{{user.username}}</b>
+                    </div>
+                    <div class="form-group">
+                        <label>用户类型：</label>
+                        <b>店铺</b>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码：</label>
+                        <b>****</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'changepwd' %}" class="btn btn-default" role="button">修改</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="money">总金额：</label>
+                        <b>¥ {{user.money}}</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'withdraw' %}" class="btn btn-default" role="button">提现</a>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">邮箱：</label>
+                        <input type="text" id="email" name="email" class="form-control" placeholder="New Email" value={{user.email}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phonenumber">手机号：</label>
+                        <input type="text" id="phonenumber" name="phonenumber" class="form-control" placeholder="New Mobile Number" value={{user.phonenumber}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">地址：</label>
+                        <input type="text" id="address" name="address" class="form-control" placeholder="New Address" value={{user.address}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="introduce">介绍：</label>
+                        <input type="text" id="introduce" name="introduce" class="form-control" placeholder="New Introduce" value={{user.introduce}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">头像（目前：<a href="{{ user.get_image_url }}">{{ user.image }}</a>）</label>
+                        <input type="file" id="image" name="image" placeholder="头像" value={{ user.get_image_url }}>
+                    </div>
+                    <button type="submit" class="btn btn-primary">修改<tton>
+                </form>
+                {% else %}
+                <form method="post" enctype="multipart/form-data" action="{% url 'modify-buyer' user.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">用户名称：</label>
+                        <b>{{user.username}}</b>
+                    </div>
+                    <div class="form-group">
+                        <label>用户类型：</label>
+                        <b>消费者</b>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码：</label>
+                        <b>****</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'changepwd' %}" class="btn btn-default" role="button">修改</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="money">总金额：</label>
+                        <b>¥ {{user.money}}</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'recharge' %}" class="btn btn-default" role="button">充值</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="realname">实名：</label>
+                        <input type="text" id="realname" name="realname" class="form-control" placeholder="New Real Name" value={{user.realname}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">邮箱：</label>
+                        <input type="text" id="email" name="email" class="form-control" placeholder="New Email" value={{user.email}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phonenumber">手机号：</label>
+                        <input type="text" id="phonenumber" name="phonenumber" class="form-control" placeholder="New Mobile Number" value={{user.phonenumber}} required/>
+                    </div>
+                        <div class="form-group">
+                        <label for="address">地址：</label>
+                        <input type="text" id="address" name="address" class="form-control" placeholder="New Address" value={{user.address}} required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">头像（目前：<a href="{{ user.get_image_url }}">{{ user.image }}</a>）</label>
+                        <input type="file" id="image" name="image" placeholder="头像" value={{ user.get_image_url }}>
+                    </div>
+                    <button type="buyer" class="btn btn-primary">修改</button>
+                {% endif %}
+            {% endif %}
+        </div><br>
+    </div>
+</div>
+{% endblock %}

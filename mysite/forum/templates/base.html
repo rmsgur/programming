@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+  .base_container{width:1050px; height:auto; margin:0 auto; }
+  .base_header{width=220px; float:left; }
+  .base_search{ float:right; margin:0 auto; }
+  .base_bottom{ float:left; width:1050px; height:auto; margin:0 auto; }
+  .base_content{ float:left; }
+  .base_footer{ float:left; }
+  .search_text{ float:left; }
+  .search_button{ float:right; }
+  .container{ float:left; }
+</style>
+<head>
+    <meta charset="utf-8">
+    <title>鲨啦鲨啦</title>
+    {% load static %}
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="base_container">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                {% if user.is_authenticated %}
+                    <li role="presentation">
+                        <a href="{% url 'modify' %}"><img src="{{ user.get_image_url }}" class="img-circle" width="25" height="25"/> 我的信息 (<b>{{user.username}}</b>)</a>
+                    </li>
+                    {% if user.is_seller %}
+                        <li role="presentation">
+                            <a href="{% url 'create' %}">上传商品</a>
+                        </li>
+                    {% else %}
+                        <li role="presentation">
+                            <a href="{% url 'mycart' %}">购物车</a>
+                        </li>
+                    {% endif %}
+                    <li role="presentation">
+                        <a href="{% url 'logout' %}">登出</a>
+                    </li>
+                {% else %}
+                    <li role="presentation">
+                        <a href="{% url 'login' %}">登录</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="{% url 'signup' %}">注册</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="base_header">
+            <a href="{% url 'index' %}"><img src="{% static 'bootstrap/images/logo.jpg' %}" alt="Logo Image"/></a>
+        </div>
+        <div class="base_search">
+            <form method="get" action="{% url 'search' %}">
+                <br><br>
+                <div class="search_text">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="schWord" id="schWord" placeholder="三文鱼" size="80"/>
+                    </div>
+                </div>
+                <div class="search_button">
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="base_bottom">
+            <section id="content">
+                {% block content %}{% endblock %}
+            </section>
+        </div>
+        <div class="base_footer">
+            <footer class="footer">
+                <p>&copy; 2017 SaraSara 版权所有</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
